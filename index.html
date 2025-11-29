@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Budget Luxe – Roseline</title>
+
+<style>
+body {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    background: #111;
+    color: #f2f2f2;
+    padding: 30px;
+    margin: 0;
+}
+h1 {
+    font-size: 32px;
+    color: #d4af37;
+    margin-bottom: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+.category label {
+    color: #d4af37;
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.switch-container {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 18px;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 55px;
+    height: 28px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #444; transition: 0.4s; border-radius: 34px; border: 1px solid #666;
+}
+.slider:before {
+    position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px;
+    background-color: #fff; transition: 0.4s; border-radius: 50%;
+}
+input:checked + .slider { background-color: #d4af37; }
+input:checked + .slider:before { transform: translateX(26px); }
+.category {
+    margin-bottom: 35px; padding: 15px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.range {
+    width: 100%; margin-top: 10px; -webkit-appearance: none; background: transparent;
+}
+.range::-webkit-slider-runnable-track {
+    height: 6px; background: #333; border-radius: 3px; border: 1px solid #555;
+}
+.range::-webkit-slider-thumb {
+    -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
+    background: #d4af37; border: 2px solid #111; margin-top: -6px; cursor: pointer;
+}
+.slider-value {
+    display: block; margin-top: 8px; font-size: 16px; color: #fff; opacity: 0.85;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Budget – Version Luxe</h1>
+
+<div class="switch-container">
+  <label>Mode :</label>
+  <label class="switch">
+    <input type="checkbox" id="modeToggle">
+    <span class="slider"></span>
+  </label>
+  <span id="modeLabel">Mensuel</span>
+</div>
+
+<div id="app"></div>
+
+<script>
+const categories = {
+    "Eau": 100,
+    "Électricité": 80,
+    "Gaz": 150,
+    "Crédit Immo": 750,
+    "Assurance Auto 1": 55,
+    "Assurance Auto 2": 100,
+    "Assurance Habitation": 50,
+    "Assurance Emprunteur": 30,
+    "Protection juridique": 15,
+    "Internet": 50,
+    "Abonnement TV": 20,
+    "Abonnement Musique": 10,
+    "Autres abonnements": 20,
+    "Animaux": 100,
+    "Impôts foncier": 120,
+    "Courses": 400,
+    "Restaurant": 150,
+    "Loisir": 100,
+    "Vacances": 100,
+    "Épargne / Réserve": 100
+};
+
+let annuel = false;
+const app = document.getElementById("app");
+
+for (let cat in categories) {
+    const base = categories[cat];
+
+    app.innerHTML += `
+        <div class="category">
+            <label>${cat}</label>
+            <input type="range" min="${base - 100}" max="${base + 100}" value="${base}" 
+                   class="range" data-cat="${cat}">
+            <span class="slider-value" id="value-${cat}">${base} € / mois</span>
+        </div>
+    `;
+}
+
+function update() {
+    document.querySelectorAll(".range").forEach(slider => {
+        const cat = slider.dataset.cat;
+        const val = Number(slider.value);
+        const affichage = annuel ? (val * 12) + " € / an" : val + " € / mois";
+        document.getElementById("value-" + cat).innerText = affichage;
+    });
+}
+
+document.getElementById("modeToggle").addEventListener("change", function() {
+    annuel = this.checked;
+    document.getElementById("modeLabel").innerText = annuel ? "Annuel" : "Mensuel";
+    update();
+});
+
+document.querySelectorAll(".range").forEach(slider => {
+    slider.addEventListener("input", update);
+});
+</script>
+
+</body>
+</html>
