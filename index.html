@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget Annuel - Roseline</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<h1>Budget Annuel – Roseline & Antonin</h1>
+
+<section>
+    <h2>Dépenses mensuelles & ponctuelles</h2>
+
+    <table id="expenses-table">
+        <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Mensuel (€)</th>
+                <th>Ponctuel (€)</th>
+                <th>Annuel (€)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-category="Eau"><td>Eau</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Électricité"><td>Électricité</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Gaz"><td>Gaz</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Crédit Immo"><td>Crédit Immo</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Assurance Auto 1"><td>Assurance Auto 1</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Assurance Auto 2"><td>Assurance Auto 2</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Assurance Habitation"><td>Assurance Habitation</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Assurance Emprunteur"><td>Assurance Emprunteur</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Protection juridique"><td>Protection juridique</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Internet"><td>Internet</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Abonnement TV"><td>Abonnement TV</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Music"><td>Abonnement Musique</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Autres abonnements"><td>Autres abonnements</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Animaux"><td>Animaux</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Impôts foncier"><td>Impôts foncier</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Courses"><td>Courses</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Restaurant"><td>Restaurant</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Loisir"><td>Loisir</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Vacances"><td>Vacances</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr data-category="Épargne réserve"><td>Épargne / Réserve</td><td><input type="number"></td><td><input type="number"></td><td class="annual">0</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Revenus</h2>
+    <table id="income-table">
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Mensuel (€)</th>
+                <th>Annuel (€)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Revenu Roseline</td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr><td>Revenu Antonin</td><td><input type="number"></td><td class="annual">0</td></tr>
+            <tr><td>Loyer encaissé</td><td><input type="number"></td><td class="annual">0</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section id="summary">
+    <h2>Résumé annuel</h2>
+    <p>Total dépenses : <span id="total-expenses">0</span> €</p>
+    <p>Total revenus : <span id="total-income">0</span> €</p>
+    <p><strong>Solde annuel : <span id="balance">0</span> €</strong></p>
+    <p><strong>Solde mensuel : <span id="balance-month">0</span> €</strong></p>
+</section>
+
+<script src="assets/script.js"></script>
+
+</body>
+</html>
