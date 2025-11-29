@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Budget Luxe – Roseline</title>
+
+<style>
+body { font-family: "Segoe UI", Arial; background:#111; color:#f2f2f2; padding:30px; }
+h1 { color:#d4af37; text-transform:uppercase; letter-spacing:1.5px; }
+.category { margin-bottom:35px; padding-bottom:15px; border-bottom:1px solid #333; }
+.category label { color:#d4af37; font-size:18px; }
+.switch-container { display:flex; gap:15px; margin-bottom:30px; font-size:18px; }
+
+/* Switch */
+.switch{position:relative;display:inline-block;width:55px;height:28px;}
+.switch input{opacity:0;width:0;height:0;}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#444;border:1px solid #666;border-radius:34px;transition:.4s;}
+.slider:before{position:absolute;content:"";height:22px;width:22px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.4s;}
+input:checked + .slider{background:#d4af37;}
+input:checked + .slider:before{transform:translateX(26px);}
+
+/* Range */
+.range{width:100%;margin-top:10px;-webkit-appearance:none;background:transparent;}
+.range::-webkit-slider-runnable-track{height:6px;background:#333;border:1px solid #555;border-radius:3px;}
+.range::-webkit-slider-thumb{-webkit-appearance:none;height:18px;width:18px;background:#d4af37;border:2px solid #111;border-radius:50%;margin-top:-6px;cursor:pointer;}
+.slider-value{margin-top:8px;font-size:16px;opacity:0.85;}
+
+/* Totaux */
+#totaux{margin-top:40px;padding:20px;background:#181818;border:1px solid #333;border-radius:8px;}
+.total-line{font-size:20px;margin:8px 0;}
+.positif{color:#4caf50;font-weight:bold;}
+.negatif{color:#e53935;font-weight:bold;}
+</style>
+</head>
+
+<body>
+
+<h1>Budget – Version Luxe</h1>
+
+<div class="switch-container">
+  <label>Mode :</label>
+  <label class="switch">
+    <input type="checkbox" id="modeToggle">
+    <span class="slider"></span>
+  </label>
+  <span id="modeLabel">Mensuel</span>
+</div>
+
+<h2 style="color:#d4af37;">Revenus</h2>
+<div id="revenus"></div>
+
+<h2 style="color:#d4af37;margin-top:40px;">Dépenses</h2>
+<div id="depenses"></div>
+
+<div id="totaux">
+  <div class="total-line">Total Revenus : <span id="totalRevenus">0</span> €</div>
+  <div class="total-line">Total Dépenses : <span id="totalDepenses">0</span> €</div>
+  <div class="total-line">Solde : <span id="solde">0</span> €</div>
+</div>
+
+<script>
+/* Revenus */
+const revenus = {
+    "Revenu Roseline": 1600,
+    "Revenu Antonin": 1600,
+    "Loyer encaissé": 350
+};
+
+/* Dépenses */
+const depenses = {
+    "Eau":100,"Électricité":80,"Gaz":150,"Crédit Immo":750,
+    "Assurance Auto 1":55,"Assurance Auto 2":100,"Assurance Habitation":50,
+    "Assurance Emprunteur":30,"Protection juridique":15,"Internet":50,
+    "Abonnement TV":20,"Abonnement Musique":10,"Autres abonnements":20,
+    "Animaux":100,"Impôts foncier":120,"Courses":400,"Restaurant":150,
+    "Loisir":100,"Vacances":100,"Épargne / Réserve":100,
+    "Crédit Auto":0
+};
+
+let annuel = false;
+
+function buildUI(){
+    let revDiv=document.getElementById("revenus");
+    let depDiv=document.getElementById("depenses");
+
+    for (let cat in revenus){
+        const base=revenus[cat];
+        revDiv.innerHTML+=`
+            <div class="category">
+                <label>${cat}</label>
+                <input type="range" min="${base-500}" max="${base+500}" value="${base}" class="range rev" data-cat="${cat}">
+                <span class="slider-value" id="rev-${cat}">${base} € / mois</span>
+            </div>`;
+    }
+
+    for (let cat in depenses){
+        const base=depenses[cat];
+        let min=cat==="Crédit Auto"?0:base-100;
+        let max=cat==="Crédit Auto"?500:base+100;
+        depDiv.innerHTML+=`
+            <div class="category">
+                <label>${cat}</label>
+                <input type="range" min="${min}" max="${max}" value="${base}" class="range dep" data-cat="${cat}">
+                <span class="slider-value" id="dep-${cat}">${base} € / mois</span>
+            </div>`;
+    }
+}
+
+buildUI();
+update();
+
+function update(){
+    let totalRev=0;
+    let totalDep=0;
+
+    document.querySelectorAll(".rev").forEach(sl=>{
+        let cat=sl.dataset.cat;
+        let val=Number(sl.value);
+        let affich=annuel?val*12+" € / an":val+" € / mois";
+        document.getElementById("rev-"+cat).innerText=affich;
+        totalRev+= ann%1?0: (annuel? val*12:val);
+    });
+
+    document.querySelectorAll(".dep").forEach(sl=>{
+        let cat=sl.dataset.cat;
+        let val=Number(sl.value);
+        let affich=annuel?val*12+" € / an":val+" € / mois";
+        document.getElementById("dep-"+cat).innerText=affich;
+        totalDep+= annuel? val*12:val;
+    });
+
+    document.getElementById("totalRevenus").innerText=totalRev.toFixed(2);
+    document.getElementById("totalDepenses").innerText=totalDep.toFixed(2);
+
+    let solde = totalRev - totalDep;
+    let soldeSpan = document.getElementById("solde");
+    soldeSpan.innerText = solde.toFixed(2);
+    soldeSpan.className = solde >= 0 ? "positif" : "negatif";
+}
+
+document.getElementById("modeToggle").addEventListener("change",()=>{
+    annuel = event.target.checked;
+    document.getElementById("modeLabel").innerText = annuel ? "Annuel" : "Mensuel";
+    update();
+});
+
+document.querySelectorAll(".range").forEach(sl=>{
+    sl.addEventListener("input", update);
+});
+</script>
+
+</body>
+</html>
